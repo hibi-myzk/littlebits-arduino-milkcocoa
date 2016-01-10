@@ -41,6 +41,21 @@ sampleDataStore.on("push", function(datum) {
     // 内部のログ
     console.log('[push complete]');
     console.log(datum);
+
+    // データストアの最大件数に達しないように古いデータを削除
+    sampleDataStore.stream().size(1).sort('asc').next(function(err, data) {
+      data.forEach(function(value) {
+        console.log('[remove ' + value.id + ']');
+        sampleDataStore.remove(value.id,
+            function(err, datum) {
+              if (err !== null )
+                console.log('Remove Error: ' + err);
+            },
+            function(err) {
+              console.log('Remove Error: ' + err);
+            });
+      });
+    });
 });
 
 // Server ////////////////////////////////////
