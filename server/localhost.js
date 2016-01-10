@@ -104,7 +104,14 @@ sp.on('data', function(input) {
           sound: Number(dataArray[1]),
           motion: Number(dataArray[2])
         };
-        sampleDataStore.push({ sensorData : data });
+        sampleDataStore.push({ sensorData : data },
+            function(err, datum) {
+              if (err !== null )
+                console.log('Error: ' + err);
+            },
+            function(err) {
+              console.log('Error: ' + err);
+            });
 
         console.log(Number(data.light));
         console.log(lightOn);
