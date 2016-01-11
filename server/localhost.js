@@ -44,6 +44,11 @@ sampleDataStore.on("push", function(datum) {
 
     // データストアの最大件数に達しないように古いデータを削除
     sampleDataStore.stream().size(1).sort('asc').next(function(err, data) {
+      if (err) {
+        console.log('Error: ' + err);
+        return;
+      }
+
       data.forEach(function(value) {
         console.log('[remove ' + value.id + ']');
         sampleDataStore.remove(value.id,
