@@ -5,8 +5,8 @@ var bodyParser = require('body-parser');
 var os = require('os');
 
 var request = require('request');
-var onURL = 'https://maker.ifttt.com/trigger/lightsensor_on/with/key/' + process.env.IFTTT_KEY;
-var offURL = 'https://maker.ifttt.com/trigger/lightsensor_off/with/key/' + process.env.IFTTT_KEY;
+var onURL = 'https://maker.ifttt.com/trigger/lightsensor_on2/with/key/' + process.env.IFTTT_KEY;
+var offURL = 'https://maker.ifttt.com/trigger/lightsensor_off2/with/key/' + process.env.IFTTT_KEY;
 var irkitOption = {
   uri: 'http://' + process.env.IRKIT_HOST + '.local/messages',
   headers: { 'X-Requested-With': 'curl' },
@@ -19,7 +19,7 @@ var lightOn = true;
 var lowCounter = 0;
 
 var MILKCOCOA_APP_ID = process.env.MILKCOCOA_APP_ID;
-var MILKCOCOA_DATASTORE_ID = "lightsensor_data";
+var MILKCOCOA_DATASTORE_ID = "lightsensor_data2";
 
 console.log(new Date());
 console.log("MILKCOCOA_APP_ID:" + MILKCOCOA_APP_ID);
@@ -44,9 +44,13 @@ sampleDataStore.on("push", function(datum) {
 
     // データストアの最大件数に達しないように古いデータを削除
     sampleDataStore.stream().size(1).sort('asc').next(function(err, data) {
-      if (data == null) {
+      if (err) {
+        console.log('Error: ' + err);
+        return;
+      } else if (data == null) {
         return;
       }
+
       data.forEach(function(value) {
         console.log('[remove ' + value.id + ']');
         sampleDataStore.remove(value.id,
